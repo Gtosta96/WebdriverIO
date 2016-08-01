@@ -1,0 +1,15 @@
+{
+  "name": "WebdriverIO",
+  "version": "1.0.0",
+  "description": "WebdriverIO is a prototype",
+  "main": "main.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Gtosta96/WebdriverIO"
+  },
+  "author": "Gabriel Tosta",
+  "license": "UNLICENSED",
+  "dependencies": {
+      "devtool": "^2.0.3"
+  }
+}
