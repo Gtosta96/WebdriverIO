@@ -1,43 +1,67 @@
+/* Informações sobre o agendamento
+*   Data agendada: 30/08/2016
+*   Horário agendado: 12:51
+*   Posto de Atendimento: DPF/SOD/SP - DELEGACIA DE POLÍCIA FEDERAL EM SOROCABA > DPF/SOD/SP
+*   Rodovia Raposo Tavares - km, 103,5, Jardim Itanguá
+*   SOROCABA/ SP
+*   CEP: 18052-775 Telefone(s): (15) 3217-7760 / (15) 3217-7760 / (15) 3217-7760
+*/
 (function() {
-	'use strict';
+    'use strict';
 
-	var webdriver = require('webdriverio');
-	var utils = require('./utils');
-	var options = {
-	    desiredCapabilities: {
-	        browserName: 'chrome'
-	    }
-	};
-	var device = webdriver.remote(options).init();
-	var browser = device.url('https://servicos.dpf.gov.br/sinpa/realizarReagendamento.do;jsessionid=68B74F9E05CF670EB6B08E79C6B404F3.sdf0021_inst_0?dispatcher=exibirSolicitacaoReagendamento&validate=false');
+    var webdriver = require('webdriverio');
+    var fs = require('fs');
+    var utils = require('./utils');
 
-	start();
+    var device;
+    var browser;
+		var count = 0;
+    setInterval(start, 1800000);
+		start();
 
-	function start() {
-		Promise.all([
-			browser.setValue('input[type="text"]#cpf', '41296957896'),
-			browser.setValue('input[type="text"]#protocolo', '12016.0002091397'),
-			browser.setValue('input[type="text"]#dataNascimento', '10031996')
-		]).then(utils.execute(executeAfterCredentials, 5000));
-	}
+		var logInfo;
+    function start() {
+			var now = new Date();
+			logInfo = '(try: ' + count + ') ' + now.getDay() + '/' + now.getMonth() + ' - ' + now.getHours() + ":" + now.getMinutes() + ":" + now.getSeconds() + ' --> ';
+			count++;
 
-	function executeAfterCredentials() {
-		Promise.all([
-				browser.click('input[name="Prosseguir"]'),
-				browser.waitForExist('#postoComAgendamento236', 5000).click('#postoComAgendamento236')
-		]).then(function() {
-			browser.getValue('select#dataAtendimento > option').then(getDates);
-		});
+      device = webdriver.remote({ desiredCapabilities: {browserName: 'chrome'} }).init();
+      browser = device.url('https://servicos.dpf.gov.br/sinpa/realizarReagendamento.do?dispatcher=exibirSolicitacaoReagendamento&validate=false');
 
-		function getDates(dates) {
-			var earliestDate = new Date(dates[1]);
-			var myDate = new Date('2016-08-22');
+      Promise.all([
+          browser.setValue('input[type="text"]#cpf', '--'),
+          browser.setValue('input[type="text"]#protocolo', '--'),
+          browser.setValue('input[type="text"]#dataNascimento', '--')
+      ]).then(utils.execute(executeAfterCredentials, 10000));
+    };
 
-			if(myDate.getTime() > earliestDate.getTime()) {
-				console.log('earliestDate: %o', earliestDate);
-			} else {
-				console.log('no-date :(');
-			}
-		}
-	}
+    function executeAfterCredentials() {
+        Promise.all([
+            browser.click('input[name="Prosseguir"]'),
+            browser.waitForExist('#postoComAgendamento236', 5000).click('#postoComAgendamento236')
+        ]).then(function() {
+            browser.getValue('select#dataAtendimento > option').then(getDates);
+        });
+    };
+
+    function getDates(dates) {
+        var date = dates[1];
+        var availableDate = new Date(date);
+        var myDate = new Date('2016-08-30');
+
+        if (myDate.getTime() > availableDate.getTime()) {
+            writeInFile(date);
+        }
+				console.log('LOGGING: ' + logInfo + ' date available: ' + date);
+        browser.end();
+    };
+
+    function writeInFile(date) {
+        fs.readFile('logs.log', function(err, oldData) {
+            if (err) console.log('ARQUIVO NÃO EXISTENTE, CRIANDO...');
+
+            var newData = oldData + logInfo + date + '\n';
+            fs.writeFile('logs.log', newData);
+        });
+    };
 }());

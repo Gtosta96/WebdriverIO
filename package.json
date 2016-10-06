@@ -10,6 +10,7 @@
   "author": "Gabriel Tosta",
   "license": "UNLICENSED",
   "dependencies": {
-      "devtool": "^2.0.3"
+    "devtool": "^2.0.3",
+    "webdriverio": "^4.2.7"
   }
 }
