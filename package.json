@@ -3,6 +3,12 @@
   "version": "1.0.0",
   "description": "WebdriverIO is a prototype",
   "main": "main.js",
+  "scripts": {
+    "background": "java -jar -Dwebdriver.chrome.driver=\"./bin/chromedriver.exe\" ./bin/selenium-server-standalone-3.0.1.jar",
+    "start-old": "node ./src/old/agendamentoPassaporte.js",
+    "debug-old": "./node_modules/.bin/devtool ./src/old/agendamentoPassaporte.js",
+    "start-new": "node ./src/new/facebook.js"
+  },
   "repository": {
     "type": "git",
     "url": "https://github.com/Gtosta96/WebdriverIO"
@@ -10,7 +16,9 @@
   "author": "Gabriel Tosta",
   "license": "UNLICENSED",
   "dependencies": {
-    "devtool": "^2.0.3",
     "webdriverio": "^4.2.7"
+  },
+  "devDependencies": {
+    "devtool": "^2.3.1"
   }
 }
