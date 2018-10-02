@@ -7,7 +7,8 @@
     "background": "java -jar -Dwebdriver.chrome.driver=\"./bin/chromedriver.exe\" ./bin/selenium-server-standalone-3.0.1.jar",
     "start-old": "node ./src/old/agendamentoPassaporte.js",
     "debug-old": "./node_modules/.bin/devtool ./src/old/agendamentoPassaporte.js",
-    "start-new": "node ./src/new/facebook.js"
+    "start-facebook": "node ./src/new/facebook.js",
+    "start-youtube": "node ./src/new/youtube.js"
   },
   "repository": {
     "type": "git",
