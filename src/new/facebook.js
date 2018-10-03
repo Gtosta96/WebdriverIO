@@ -19,8 +19,8 @@ async function start() {
 
   try {
     await Promise.all([
-      browser.setValue('input#email', '-'),
-      browser.setValue('input#pass', '-'),
+      browser.setValue('input#email', 'temporaryAccFatec@outlook.com'),
+      browser.setValue('input#pass', 'b@tata123'),
     ]);
     await browser.click('input[data-testid="royal_login_button"');
 
@@ -32,11 +32,10 @@ async function start() {
     await browser.waitForExist('div#BrowseResultsContainer', 5000);
     await browser.click('div=Heroway')
 
-    // await browser.waitForExist('button[data-testid="page_profile_like_button_test_id"]', 5000);
-
-    setInterval(() => {
+    setInterval(async () => {
+      await browser.waitForExist('button[data-testid="page_profile_like_button_test_id"]', 5000);
       browser.click('button[data-testid="page_profile_like_button_test_id"]');
-    }, 10000);
+    }, 5000);
     
   } catch(e) {
     console.log(e);
